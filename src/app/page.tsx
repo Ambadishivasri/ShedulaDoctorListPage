@@ -1,65 +1,150 @@
-import Image from "next/image";
+"use client";
+
+import { useEffect, useState } from "react";
 
 export default function Home() {
+  const [isLogin, setIsLogin] = useState(true);
+
+  const [email, setEmail] = useState("");
+  const [phone, setPhone] = useState("");
+  const [password, setPassword] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
+
+  const [bubbles, setBubbles] = useState<
+    { left: string; size: string; duration: string }[]
+  >([]);
+
+  useEffect(() => {
+    const newBubbles = Array.from({ length: 15 }).map(() => ({
+      left: `${Math.random() * 100}%`,
+      size: `${30 + Math.random() * 50}px`,
+      duration: `${10 + Math.random() * 10}s`,
+    }));
+    setBubbles(newBubbles);
+  }, []);
+
+  const handleLogin = () => {
+    if (!email && !phone) {
+      alert("Enter email or phone");
+      return;
+    }
+
+    localStorage.setItem("userEmail", email || phone);
+    window.location.href = "/dashboard";
+  };
+
   return (
-    <div className="flex min-h-screen items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex min-h-screen w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the page.tsx file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
+    <main className="page">
+      {/* Bubbles */}
+      <div className="bubble-container">
+        {bubbles.map((b, i) => (
+          <span
+            key={i}
+            style={{
+              left: b.left,
+              width: b.size,
+              height: b.size,
+              animationDuration: b.duration,
+            }}
+          />
+        ))}
+      </div>
+
+      <div className="card">
+        {/* Logo Section */}
+        <div className="logo">
+          <img src="logo.png" alt="Shedula"/>
+
+          <h1>Shedula</h1>
+          <span><strong>PearlThoughts</strong></span>
+          <p className="tagline">
+            Make your appointments seamless with Shedula.
           </p>
         </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={16}
+
+        {isLogin ? (
+          <div key="login">
+            <input
+              type="text"
+              placeholder="Email or Phone"
+              value={email || ""}
+              onChange={(e) => setEmail(e.target.value || "")}
             />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
-        </div>
-      </main>
-    </div>
+
+            <div className="password-wrap">
+              <input
+                type={showPassword ? "text" : "password"}
+                placeholder="Enter Password"
+                value={password || ""}
+                onChange={(e) => setPassword(e.target.value || "")}
+              />
+              <span
+                className="toggle"
+                onClick={() => setShowPassword(!showPassword)}
+              >
+                {showPassword ? "Hide" : "Show"}
+              </span>
+            </div>
+
+            <div className="options">
+              <div className="remember">
+                <input type="checkbox" defaultChecked={false} />
+                <span>Remember me</span>
+              </div>
+              <a>Forgot password?</a>
+            </div>
+
+            <button onClick={handleLogin}>Sign In</button>
+
+            <div className="google">Sign in with Google</div>
+
+            <div className="switch">
+              Don’t have an account?{" "}
+              <a onClick={() => setIsLogin(false)}>Sign Up</a>
+            </div>
+          </div>
+        ) : (
+          <div key="signup">
+            <input type="text" placeholder="Full Name" defaultValue="" />
+
+            <input
+              type="email"
+              placeholder="Email"
+              value={email || ""}
+              onChange={(e) => setEmail(e.target.value || "")}
+            />
+
+            <input
+              type="tel"
+              placeholder="Phone Number"
+              value={phone || ""}
+              onChange={(e) => setPhone(e.target.value || "")}
+            />
+
+            <div className="password-wrap">
+              <input
+                type={showPassword ? "text" : "password"}
+                placeholder="Create Password"
+                value={password || ""}
+                onChange={(e) => setPassword(e.target.value || "")}
+              />
+              <span
+                className="toggle"
+                onClick={() => setShowPassword(!showPassword)}
+              >
+                {showPassword ? "Hide" : "Show"}
+              </span>
+            </div>
+
+            <button onClick={() => setIsLogin(true)}>Register</button>
+
+            <div className="switch">
+              Already have an account?{" "}
+              <a onClick={() => setIsLogin(true)}>Sign In</a>
+            </div>
+          </div>
+        )}
+      </div>
+    </main>
   );
 }

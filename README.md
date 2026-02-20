@@ -1,36 +1,129 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# 🏥 Shedula -- Healthcare Appointment Portal
 
-## Getting Started
+## 📌 Overview
 
-First, run the development server:
+**Shedula** is a modern healthcare appointment web application built
+using **Next.js (App Router)** and **React**.\
+It provides a clean, animated authentication interface and a structured
+dashboard experience for users to manage healthcare interactions
+seamlessly.
 
-```bash
+The application focuses on UI/UX excellence, smooth animations, and
+scalable architecture suitable for healthcare platforms.
+
+------------------------------------------------------------------------
+
+## 🚀 Features
+
+### 🔐 Authentication System
+
+-   Login using **Email or Phone Number**
+-   Secure password field with **Show / Hide toggle**
+-   "Remember Me" option
+-   "Forgot Password" link (UI ready)
+-   Google Sign-In button (UI ready)
+-   Signup form with:
+    -   Full Name
+    -   Email
+    -   Phone Number
+    -   Password
+
+### 🎨 UI/UX Highlights
+
+-   Animated floating background bubbles
+-   Centered beating medical logo
+-   Responsive card layout
+-   Hover glow effects
+-   Smooth transitions between Login & Signup
+-   Clean healthcare-themed design
+
+### 📊 Dashboard (Single User Dashboard)
+
+-   Redirect after login
+-   Local storage-based user session simulation
+
+------------------------------------------------------------------------
+
+## 🧠 Application Logic
+
+### 1️⃣ State Management
+
+The app uses React's `useState` for: - Email - Phone - Password -
+Show/Hide password toggle - Login/Signup switch - Background animation
+bubbles
+
+### 2️⃣ Controlled Inputs
+
+All input fields use controlled components: const \[email, setEmail\] =
+useState("");
+
+This ensures: - No uncontrolled/controlled warnings - Stable React
+rendering - Predictable form behavior
+
+### 3️⃣ Bubble Animation Logic
+
+Random bubble properties are generated inside: useEffect(() =\> { ... },
+\[\]);
+
+This prevents hydration mismatch in Next.js by ensuring random values
+are generated only on the client side.
+
+### 4️⃣ Session Simulation
+
+Upon login: localStorage.setItem("userEmail", email \|\| phone);
+
+This simulates session storage before redirecting to `/dashboard`.
+
+------------------------------------------------------------------------
+
+## 🏗️ Project Structure
+
+src/ ├── app/ │ ├── page.tsx \# Authentication Page │ ├── dashboard/ \#
+User Dashboard │ ├── globals.css \# Global Styling │ └── layout.tsx \#
+App Layout Wrapper
+
+------------------------------------------------------------------------
+
+## 🛠️ Technologies Used
+
+-   Next.js 14+ (App Router)
+-   React
+-   TypeScript
+-   CSS (Custom Styling)
+-   LocalStorage (Session Simulation)
+
+------------------------------------------------------------------------
+
+## 💡 Why Use This Project?
+
+-   Clean authentication UI template
+-   Perfect starter for healthcare SaaS
+-   Easily extendable to backend integration
+-   Good example of avoiding hydration errors
+-   Demonstrates controlled component best practices
+
+------------------------------------------------------------------------
+
+## ⚙️ How To Run Locally
+
+### 1️⃣ Install dependencies
+
+npm install
+
+### 2️⃣ Start development server
+
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+### 3️⃣ Open in browser
+
+http://localhost:3000
+
 
 You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
 
 This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
 
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
 ## Deploy on Vercel
 
 The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.

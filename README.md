@@ -8,9 +8,6 @@ It provides a clean, animated authentication interface and a structured
 dashboard experience for users to manage healthcare interactions
 seamlessly.
 
-The application focuses on UI/UX excellence, smooth animations, and
-scalable architecture suitable for healthcare platforms.
-
 ------------------------------------------------------------------------
 
 ## 🚀 Features
@@ -22,11 +19,7 @@ scalable architecture suitable for healthcare platforms.
 -   "Remember Me" option
 -   "Forgot Password" link (UI ready)
 -   Google Sign-In button (UI ready)
--   Signup form with:
-    -   Full Name
-    -   Email
-    -   Phone Number
-    -   Password
+-   Signup form 
 
 ### 🎨 UI/UX Highlights
 
@@ -94,16 +87,6 @@ App Layout Wrapper
 
 ------------------------------------------------------------------------
 
-## 💡 Why Use This Project?
-
--   Clean authentication UI template
--   Perfect starter for healthcare SaaS
--   Easily extendable to backend integration
--   Good example of avoiding hydration errors
--   Demonstrates controlled component best practices
-
-------------------------------------------------------------------------
-
 ## ⚙️ How To Run Locally
 
 ### 1️⃣ Install dependencies
@@ -120,8 +103,6 @@ http://localhost:3000
 
 
 You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
-
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
 
 ## Deploy on Vercel
 

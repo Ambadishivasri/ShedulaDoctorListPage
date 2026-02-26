@@ -5,6 +5,7 @@ import { useEffect, useState } from "react";
 export default function Home() {
   const [isLogin, setIsLogin] = useState(true);
 
+  const [fullName, setFullName] = useState("");
   const [email, setEmail] = useState("");
   const [phone, setPhone] = useState("");
   const [password, setPassword] = useState("");
@@ -24,18 +25,57 @@ export default function Home() {
   }, []);
 
   const handleLogin = () => {
-    if (!email && !phone) {
-      alert("Enter email or phone");
+    const users = JSON.parse(localStorage.getItem("users") || "[]");
+
+    const userExists = users.find(
+      (u: any) =>
+        (u.email === email || u.phone === email) &&
+        u.password === password
+    );
+
+    if (!userExists) {
+      alert("Invalid credentials");
       return;
     }
 
-    localStorage.setItem("userEmail", email || phone);
-    window.location.href = "/dashboard";
+    // ✅ store name
+    localStorage.setItem("userName", userExists.fullName);
+    localStorage.setItem("userLoginValue", email);
+
+    // ✅ generate and store OTP (static for now)
+    const generatedOtp = "1234";
+    localStorage.setItem("generatedOtp", generatedOtp);
+
+    // ✅ redirect to OTP page instead of dashboard
+    window.location.href = "/otp";
+  };
+
+  const handleRegister = () => {
+    if (!fullName || !email || !phone || !password) {
+      alert("Please fill all fields");
+      return;
+    }
+
+    const users = JSON.parse(localStorage.getItem("users") || "[]");
+
+    const alreadyExists = users.find(
+      (u: any) => u.email === email || u.phone === phone
+    );
+
+    if (alreadyExists) {
+      alert("Account already exists. Please login.");
+      return;
+    }
+
+    users.push({ fullName, email, phone, password });
+    localStorage.setItem("users", JSON.stringify(users));
+
+    alert("Registration successful. Please login.");
+    setIsLogin(true);
   };
 
   return (
     <main className="page">
-      {/* Bubbles */}
       <div className="bubble-container">
         {bubbles.map((b, i) => (
           <span
@@ -51,12 +91,12 @@ export default function Home() {
       </div>
 
       <div className="card">
-        {/* Logo Section */}
         <div className="logo">
-          <img src="logo.png" alt="Shedula"/>
-
+          <img src="logo.png" alt="Shedula" />
           <h1>Shedula</h1>
-          <span><strong>PearlThoughts</strong></span>
+          <span>
+            <strong>PearlThoughts</strong>
+          </span>
           <p className="tagline">
             Make your appointments seamless with Shedula.
           </p>
@@ -69,6 +109,7 @@ export default function Home() {
               placeholder="Email or Phone"
               value={email || ""}
               onChange={(e) => setEmail(e.target.value || "")}
+              style={{ caretColor: "#000" }}
             />
 
             <div className="password-wrap">
@@ -77,6 +118,7 @@ export default function Home() {
                 placeholder="Enter Password"
                 value={password || ""}
                 onChange={(e) => setPassword(e.target.value || "")}
+                style={{ caretColor: "#000" }}
               />
               <span
                 className="toggle"
@@ -88,7 +130,7 @@ export default function Home() {
 
             <div className="options">
               <div className="remember">
-                <input type="checkbox" defaultChecked={false} />
+                <input type="checkbox" />
                 <span>Remember me</span>
               </div>
               <a>Forgot password?</a>
@@ -105,13 +147,20 @@ export default function Home() {
           </div>
         ) : (
           <div key="signup">
-            <input type="text" placeholder="Full Name" defaultValue="" />
+            <input
+              type="text"
+              placeholder="Full Name"
+              value={fullName}
+              onChange={(e) => setFullName(e.target.value)}
+              style={{ caretColor: "#000" }}
+            />
 
             <input
               type="email"
               placeholder="Email"
               value={email || ""}
               onChange={(e) => setEmail(e.target.value || "")}
+              style={{ caretColor: "#000" }}
             />
 
             <input
@@ -119,6 +168,7 @@ export default function Home() {
               placeholder="Phone Number"
               value={phone || ""}
               onChange={(e) => setPhone(e.target.value || "")}
+              style={{ caretColor: "#000" }}
             />
 
             <div className="password-wrap">
@@ -127,6 +177,7 @@ export default function Home() {
                 placeholder="Create Password"
                 value={password || ""}
                 onChange={(e) => setPassword(e.target.value || "")}
+                style={{ caretColor: "#000" }}
               />
               <span
                 className="toggle"
@@ -136,7 +187,7 @@ export default function Home() {
               </span>
             </div>
 
-            <button onClick={() => setIsLogin(true)}>Register</button>
+            <button onClick={handleRegister}>Register</button>
 
             <div className="switch">
               Already have an account?{" "}

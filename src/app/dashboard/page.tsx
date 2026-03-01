@@ -34,10 +34,16 @@ const doctorsData = [
 ];
 
 export default function Dashboard() {
+  const [searchTerm, setSearchTerm] = useState("");
+  const [showFilter, setShowFilter] = useState(false);
+  const [selectedDepartments, setSelectedDepartments] = useState<string[]>([]);
+
+  // adjust these names to match your departments
+  const departments = ["Cardiology", "Dermatology", "Pediatrics"];
+
   const router = useRouter();
 
   const [profileImage, setProfileImage] = useState<string | null>(null);
-  const [search, setSearch] = useState("");
   const [userName, setUserName] = useState("");
   const [appointments, setAppointments] = useState<any[]>([]);
 
@@ -54,9 +60,18 @@ export default function Dashboard() {
     if (file) setProfileImage(URL.createObjectURL(file));
   };
 
-  const filteredDoctors = doctorsData.filter((doc) =>
-    doc.name.toLowerCase().includes(search.toLowerCase())
-  );
+  // filteredDoctors uses searchTerm + selectedDepartments
+  const filteredDoctors = doctorsData.filter((doc) => {
+    const matchesSearch =
+      doc.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      doc.department.toLowerCase().includes(searchTerm.toLowerCase());
+
+    const matchesDepartment =
+      selectedDepartments.length === 0 ||
+      selectedDepartments.includes(doc.department);
+
+    return matchesSearch && matchesDepartment;
+  });
 
   return (
     <div className="dashboard">
@@ -109,14 +124,56 @@ export default function Dashboard() {
         </div>
       </div>
 
-      {/* Search */}
-      <input
-        className="search-bar"
-        type="text"
-        placeholder="Search Doctors..."
-        value={search}
-        onChange={(e) => setSearch(e.target.value)}
-      />
+      {/* Search + Filter */}
+      <div className="search-row">
+        {/* give search bar a bit less width so Filter fits */}
+        <div className="search-input-wrapper">
+          <input
+            className="search-bar"
+            type="text"
+            placeholder="Search doctors..."
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+          />
+        </div>
+
+        {/* Filter dropdown trigger */}
+        <div className="filter-wrapper">
+          <button
+            type="button"
+            className="filter-button"
+            onClick={() => setShowFilter(!showFilter)}
+          >
+            Filter
+          </button>
+
+          {showFilter && (
+            <div className="filter-dropdown">
+              {departments.map((dept) => (
+                <label key={dept} className="filter-option">
+                  <span className="filter-dept-label">{dept}</span>
+                  <input
+                    type="checkbox"
+                    checked={selectedDepartments.includes(dept)}
+                    onChange={(e) => {
+                      if (e.target.checked) {
+                        setSelectedDepartments([
+                          ...selectedDepartments,
+                          dept,
+                        ]);
+                      } else {
+                        setSelectedDepartments(
+                          selectedDepartments.filter((d) => d !== dept)
+                        );
+                      }
+                    }}
+                  />
+                </label>
+              ))}
+            </div>
+          )}
+        </div>
+      </div>
 
       {/* Doctors List */}
       <div className="doctor-list">
@@ -152,11 +209,11 @@ export default function Dashboard() {
       <div className="footer">
         <div>🔍<p>Find</p></div>
         <div
-        onClick={() => router.push("/appointments")}
-        style={{ cursor: "pointer" }}
+          onClick={() => router.push("/appointments")}
+          style={{ cursor: "pointer" }}
         >
-        📅
-        <p>Appointment</p>
+          📅
+          <p>Appointment</p>
         </div>
         <div>📖<p>History</p></div>
         <div>👤<p>Profile</p></div>
